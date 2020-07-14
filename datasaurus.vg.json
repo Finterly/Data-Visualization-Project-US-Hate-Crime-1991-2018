@@ -1,0 +1,120 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 400,
+  "height": 300,
+  "padding": 20,
+  "data": [
+    {
+      "name": "source",
+      "url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/datasaurus.json",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "'🦖'",
+          "as": "dino"
+        }
+      ]
+    },
+    {
+      "name": "dinoyum",
+      "values": [
+        {
+          "a": "20",
+          "b": "40",
+          "yum": "🍔"
+        }
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "'🍔'",
+          "as": "yum"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xScale",
+      "type": "linear",
+      "domain": {
+        "data": "source",
+        "field": "x"
+      },
+      "range": "width"
+    },
+    {
+      "name": "yScale",
+      "type": "linear",
+      "domain": {
+        "data": "source",
+        "field": "y"
+      },
+      "range": "height"
+    }
+  ],
+  "axes": [
+    {
+      "scale": "xScale",
+      "orient": "bottom",
+      "tickCount": 5,
+      "title": "x",
+      "grid": true
+    },
+    {
+      "scale": "yScale",
+      "orient": "left",
+      "tickCount": 5,
+      "title": "y",
+      "grid": true
+    }
+  ],
+  "marks": [
+    {
+      "type": "text",
+      "from": {
+        "data": "source"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xScale",
+            "field": "x"
+          },
+          "y": {
+            "scale": "yScale",
+            "field": "y"
+          },
+          "text": {
+            "field": "dino"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "dinoyum"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xScale",
+            "field": "a"
+          },
+          "y": {
+            "scale": "yScale",
+            "field": "b"
+          },
+          "text": {
+            "field": "yum"
+          },
+          "fontSize": {
+            "value": 30
+          }
+        }
+      }
+    }
+  ],
+  "config": {}
+}

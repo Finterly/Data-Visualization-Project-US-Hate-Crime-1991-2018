@@ -1,0 +1,255 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 600,
+  "height": 400,
+  "padding": 20,
+  "data": [
+    {
+      "name": "source",
+      "url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/butterfly.json",
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "'🦋'",
+          "as": "wings"
+        }
+      ]
+    },
+    {
+      "name": "pattern",
+      "values": [
+        {
+          "a": "-6",
+          "b": "5",
+          "wings": "🦋"
+        },
+        {
+          "a": "6",
+          "b": "5",
+          "wings": "🦋"
+        },
+        {
+          "a": "-8.5",
+          "b": "6.5",
+          "wings": "🦋"
+        },
+        {
+          "a": "8.5",
+          "b": "6.5",
+          "wings": "🦋"
+        },
+        {
+          "a": "-7",
+          "b": "6",
+          "wings": "🦋"
+        },
+        {
+          "a": "7",
+          "b": "6",
+          "wings": "🦋"
+        },
+        {
+          "a": "-7.5",
+          "b": "5",
+          "wings": "🦋"
+        },
+        {
+          "a": "7.5",
+          "b": "5",
+          "wings": "🦋"
+        },
+        {
+          "a": "-2",
+          "b": "0",
+          "wings": "🦋"
+        },
+        {
+          "a": "2",
+          "b": "0",
+          "wings": "🦋"
+        },
+        {
+          "a": "-3",
+          "b": "1",
+          "wings": "🦋"
+        },
+        {
+          "a": "3",
+          "b": "1",
+          "wings": "🦋"
+        },
+        {
+          "a": "-2.7",
+          "b": "0",
+          "wings": "🦋"
+        },
+        {
+          "a": "2.7",
+          "b": "0",
+          "wings": "🦋"
+        },
+        {
+          "a": "-6",
+          "b": "2",
+          "wings": "🦋"
+        },
+        {
+          "a": "6",
+          "b": "2",
+          "wings": "🦋"
+        },
+        {
+          "a": "-7",
+          "b": "2",
+          "wings": "🦋"
+        },
+        {
+          "a": "7",
+          "b": "2",
+          "wings": "🦋"
+        },
+        {
+          "a": "-7",
+          "b": "2.5",
+          "wings": "🦋"
+        },
+        {
+          "a": "7",
+          "b": "2.5",
+          "wings": "🦋"
+        },
+        {
+          "a": "-3",
+          "b": "-6",
+          "wings": "🦋"
+        },
+        {
+          "a": "3",
+          "b": "-6",
+          "wings": "🦋"
+        },
+        {
+          "a": "-2",
+          "b": "-4.2",
+          "wings": "🦋"
+        },
+        {
+          "a": "2",
+          "b": "-4.2",
+          "wings": "🦋"
+        },
+        {
+          "a": "-1",
+          "b": "-2.9",
+          "wings": "🦋"
+        },
+        {
+          "a": "1",
+          "b": "-2.9",
+          "wings": "🦋"
+        },
+        {
+          "a": "-7.5",
+          "b": "6",
+          "wings": "🦋"
+        },
+        {
+          "a": "7.5",
+          "b": "6",
+          "wings": "🦋"
+        }
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "'🦋'",
+          "as": "wings"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xScale",
+      "type": "linear",
+      "domain": {
+        "data": "source",
+        "field": "x"
+      },
+      "range": "width"
+    },
+    {
+      "name": "yScale",
+      "type": "linear",
+      "domain": {
+        "data": "source",
+        "field": "y"
+      },
+      "range": "height"
+    }
+  ],
+  "axes": [
+    {
+      "scale": "xScale",
+      "orient": "bottom",
+      "tickCount": 10,
+      "title": "x",
+      "grid": true
+    },
+    {
+      "scale": "yScale",
+      "orient": "left",
+      "tickCount": 10,
+      "title": "y",
+      "grid": true
+    }
+  ],
+  "marks": [
+    {
+      "type": "text",
+      "from": {
+        "data": "source"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xScale",
+            "field": "x"
+          },
+          "y": {
+            "scale": "yScale",
+            "field": "y"
+          },
+          "text": {
+            "field": "wings"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "pattern"
+      },
+      "encode": {
+        "enter": {
+          "x": {
+            "scale": "xScale",
+            "field": "a"
+          },
+          "y": {
+            "scale": "yScale",
+            "field": "b"
+          },
+          "text": {
+            "field": "wings"
+          },
+          "fontSize": {
+            "value": 30
+          }
+        }
+      }
+    }
+  ],
+  "config": {}
+}
