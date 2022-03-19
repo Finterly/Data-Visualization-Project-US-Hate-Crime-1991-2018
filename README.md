@@ -1,6 +1,6 @@
 ## Data Visualization Project
 
-See website here: https://finterly.github.io/Data-Visualization-of-US-Hate-Crime-1991-2018/
+See website here!: https://finterly.github.io/Data-Visualization-of-US-Hate-Crime-1991-2018/mainpage.html
 
 Visualizations created using Vega, a higher-level visualization specification language on top of D3, and D3. 
 
