@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Hate Crime in the United States from 1991 to 2018</title>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+		<script src="https://vega.github.io/vega/vega.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vega-tooltip"></script>
+		<style>
+			html, body {
+				font-family: 'Roboto', sans-serif;
+				text-align: center;
+				font-size: 15px;
+			}
+			p {
+				width: 1200px;
+				margin: auto;
+				text-align: justify;
+			}
+			h3 {
+				font-weight: 400;
+				text-align: left;
+				margin-left: 44px;
+				margin-bottom: 0px;
+				padding-bottom: 0px;
+				font-size: 20px;
+			}
+			#vis1bindings, #vis2bindings {
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			
+			input[type="range"] {
+				width: 500px;
+			}
+			#vis1bindings span, #vis2bindings span {
+				padding-right: 10px;
+			}
+			#play1 span, #play2 span {
+				background: url(img/play.png) no-repeat;
+				float: left;
+				width: 32px;
+				height: 32px;
+			}
+			#stop1 span, #stop2 span {
+				background: url(img/stop.png) no-repeat;
+				float: left;
+				width: 32px;
+				height: 32px;
+			}
+			#buttonContainer1, #buttonContainer2 {
+				text-align: center;
+			}
+			.legend { list-style: none;}
+			.legend li { float: left; margin-right: 60px;; font-size: 20px;}
+			.legend span { border: 0px solid #ccc; float: left; width: 20px; height: 20px; margin: 2px; }
+			.legend .west { background-color: #94aec9;}
+			.legend .northeast { background-color:#f5b970;}
+			.legend .midwest { background-color: #a9d3d0;}
+			.legend .south { background-color: #ea9498;}
+			#chart > svg > text {
+				font-size: 40px !important;
+			}
+			#vis2bindings > div > label, #vis1bindings > div > label {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			#resolution-warning {
+				border: 5px solid red;
+				padding: 10px 10px;
+				color: red;
+				margin-bottom: 20px;
+				display: block;
+			}
+			@media (min-width: 1900px) {
+				#resolution-warning {
+					display: none !important;
+				}
+			}
+			#vis1, #vis2 {
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+	<body>
+	
+	<h1>Hate Crime in the United States from 1991 to 2018</h1>
+	<p style="font-style: italic; font-size: 16px; margin-bottom: 20px;"><img src="img/blyf.png" style="height: 60px; vertical-align: middle;"> For the KU Leuven course Data Visualization in Data Science [G0R72a] by group BLYF (Bert Van de Poel, Yang He and Finterly Hu).</p>
+	<div id="resolution-warning">Warning: Due to limitations within Vega, the visualizations require a minimum screen width of 1900 pixels (basically, at least an 1080p HD screen). Otherwise, visuals might be cut-off or may require side-scrolling.</div>
+	<p>With a growing interest in equal opportunities for all, a growing understanding of sexual orientation and gender, as well as greater sensitivity for racism and other forms of discrimination, hate crime has become a more relevant topic in the last few years. Whether it's Trump's speeches, Brexit, or the growing legal recognition of transgenders, there have been many losses and gains when it comes to discrimination and fuelling hate crime. This page tries to gain some insight in hate crime within the United States from 1991 to 2018, showing what groups are discriminating and being discriminated against, what aspect time and place play, as well as blue or red states and large events such as 9/11. While the subject itself remains sensitive, it's important to show that hate crime is not on the decrease yet and there's still a lot of work to do. Feel free to explore the visualizations beyond the suggested aspects. They were created with broad applications in mind.</p>
+	
+	<h2>The data</h2>
+	<p>All visualizations are based on <a href="https://www.fbi.gov/services/cjis/ucr/hate-crime" target="_blank">data</a> provided by the Hate Crime Statistics Program of the FBI's Uniform Crime Reporting Program. It's important to keep in mind that the FBI data contains all instances of what was considered hate crime by the reporting officer. Depending on time, space and a lot of subjective aspects, an individual or an entire area's police force could be applying principles that hate crime has to be specifically and only motivated by hate or consider the use of a single racial slur as hate crime. While both are valid principles, this means that there are some effects within the data that are caused by differences in reporting principles within certain time periods or certain states or counties. The perception of race and racism, as well as what constitutes hate agaist a religion has changed across time. Hate crime against people with a non-heterosexual sexual orientation also went unreported during the 90s, keeping in mind that some states took until 2003 to decriminalize sexual acts between persons of the same sex. While these problems with the data should be kept in mind, they don't invalidate broad conclusions and visualizations, but make focusing on very specific points in time and space somewhat more problematic.</p>
+	
+	<h2>Questions</h2>
+	<p>Ideally, everyone would like to understand what causes hate crime and how this kind of crime could be stopped from happening. Of course, if it could be easily distilled from this data set, we would not be talking about hate crime and discrimination as much as we do nowadays. It could however be useful to gain insight in the growth of hate crime against certain groups (and its growing reporting). Do certain states have more hate crime than others, and against which groups? Does this evolve over time? Is there a clear difference between red and blue states? And what do events such as 9/11 have on hate crime against specific groups? Do the most populous cities have the most hate crime, or is the story more complex? And who is actually committing these hate crime against whom, and is this consistent across the whole of the US? These are questions these visualization tries to answer. There are however many other insights to be gained from this data and from these visualizations, so exploration remains key.</p>
+	
+	<h2>Time and space</h2>
+	<p>These first two visuals represent hate crime across time for each state. The map on the left shows absolute numbers of hate crime, which of course over-emphasizes more populous states. The map on the right solves this issue by offsetting the amount of hate crime with the population (in million). As some states are very sparsely populated, both maps together paint a clearer picture. You can look at a specific year or slide through several years using the slider underneath the maps, or use the play button to automatically play through each year. If you are curious at the raw numbers or are unsure what state you're looking at, a handy tooltip can inform you further by hovering over the part of the map you're interested in. By default, all hate crime as aggregated, but it's also possible to look at certain kinds of hate crime by selecting a category from the dropdown menu. This will change both maps as well as the proportions, as some kinds of hate crime are more common or get reported more often.</p>
+	<div id="vis1"></div>
+	<div id="buttonContainer1"><button id="play1" onclick="playButton1()"><span></span></button></div>
+	<div id="vis1bindings"></div>
+	<p>As is to be expected, the left map clearly highlights some more populous states, especially California. At the same time, it highlights the tension that comes with a diverse and populous area, explaining high numbers not only in California but also in New York and New Jersey. When these numbers are offset by population, the story looks very different. While purely based on the left map, hate crime seems very focused, it's clear from the right visualization that hate crime is a problem across almost all states. While anti-Black or African American hate crime is clearly a problem across all of the US and shows no clear pattern, others kinds show a more interesting picture. As expected, anti-Jewish hate crime is prevelent in areas where Jewish communities have settled. But two specific categories introduce a much more interesting story.<br>
+	<br>
+	Surprisingly, anti-Arab and anti-Muslim hate crime are much rarer then expected. While in Europe, discrimination against these two groups with quite a bit of overlap has been historically present, the data paints a very different picture. Clearly, both of these groups were not on the radar of offenders (or law enforcement) until the 9/11 terrorist attacks in 2001. Especially with anti-Muslim hate crime, the map suddenly lights up with color, even in very sparesly populated areas, cleary showing that these groups were heavily targeted due to association. Surprisingly, the effect is very short lived, and even in 2002 it already seems to have cooled down largely. While some kind of Trump effect was expected for anti-Muslim as well as anti-Latino crime, the data doesn't show a clear enough pattern yet. Perhaps when data for 2019 and 2020 is released, more will become clear. Perhaps there would also be a clear anti-Asian pattern due to the coronavirus.<br>
+	<br>
+	A final point of interest was anti-LGBT hate crime. Most people will be aware that for the majority of time, this group had no right to protection, and therefore was unable to report hate crime based on sexual orientation or gender identity. Unexpectedly, this doesn't turn around yet in the late 2000s, but there's only a clear shift starting in 2013. While this may seem like a data anomaly or a change in reporting, it seems grounded in some fundamental changes to LGBT rights. In 2013, several states introduced same-sex marriage or civil unions, and several courts found in favour of LGBT plaintiffs. This trend continued in 2014 with many more legal challenges to existing bans on same-sex marriage, culminating in the Supreme Court decision to legalise same-sex marriage across the whole of the US. It seems the increase in rights and visibility motivated victims to more actively report hate crime and law enforcement to file it correctly. 
+	</p>
+	
+	<h2>Politics, holidays and events</h2>
+	<p>Clearly, politics and other events play a large role in the proliferation of hate crime. If 9/11 and legal progress for the LGBT community had such an impact on hate crime, it seems very relevant to look at what politics can cause, especially in times where some politicians openly support certain forms of discrimination. In the following two graphs, US election results were used to categorize states. On the left scatter plot, all states are grouped together based on their election result for each day of the year. The stars represent key events (larger stars) and holidays (smaller stars). When hovering across the stars, the event or holiday, the amount of hate crime and date is shown. Similarly, a tooltip with the date and amount of hate crime per million is displayed when hovering over the different dots. This same number is used for the y-axis of this graph. On the right, a similar map is shown to the previous two visualizations, however this time the colors are based on the election results. At the bottom, a year slider and play button make it easy to scroll through time and explore.</p>
+	<div id="vis2"></div>
+	<div id="buttonContainer2"><button id="play2" onclick="playButton2()"><span></span></button></div>
+	<div id="vis2bindings"></div>
+	<p>It's of course immediately clear from the scatter plot on the left that there seems to be much more hate crime within the combined democratic states. There are however many potential explanations for this pattern. First of all the difference between both groups clearly decreases over time. This may mean that reporting was initially done much more diligently by democratic states and that republican states caught up over time. This would however also mean that there in general is a decrease in hate crime, which is uncertain. It's also the case that the most diverse states are most of the time voting democrat, meaning that those with more tensions (causing hate crime) are in the democratic group. This remains however an open question.<br>
+	<br>
+	Some large events clearly spark hate crime, such as the April 29, 1992 riots and the 9/11 terrorist attacks. Beyond that, there's an unexpected pattern where Halloween and the day after seem to cause or invite hate crime, potentially because of celebrations and lots of contact within neighbourhoods where tensions may already be high. Lower crime is also observed around the Christmas holidays. In the years of Obama’s presidency 2009 through 2017, we observe lower hate crime rates. While a Trump effect was missing from our maps, a small increase in hate crime can be seen around November 2016, where many papers reported an increase in hate crime during the presidential transition period.</p>
+	
+	<h2>Victims and offenders</h2>
+	<p>Our first visualizations have shown us what kinds of hate crime are common, while the second group has clearly shown some effects of politics and events. This however doesn't really answer the question who are the people involved in these crimes. These four radar graphs show the distribution of victims and offenders across different races for the four main areas of the US.</p>
+	<div id="vis3"></div>
+	<p>These graphs don't come as a surprise and confirm what many readers would expect. In most cases, the perpetrator of hate crime is white and in most cases it's targeted against Black and African American victims. However, quite often the race or ethnicity of the offender is not known. We also clearly see that the Jewish community in Northeastern states such as New York and New Jersey gets almost as much hate crime in that area as African Americans. Even though California and neighbouring states are known for tensions concerning its Latino population, it seems the amount of victims from this group is limited. Whether this is indeed the case or comes from a lack of legal status or trust in the police force is unclear.</p>
+	
+	<h2>Cities</h2>
+	<p>While we've largely looked at the macro level at states and the entire US, local insight can be very useful. This final visualization shows the top 10 US cities for hate crime throughout time. The color is based on the region the city is in. As numbers shift drastically across time, the axis will automatically adjust when playing with the year slider or using the automatic playback.</p>
+	<h3>Top ten cities for highest hate crime count</h3>
+	<ul class="legend">
+		<li><span class="west"></span> West</li>
+		<li><span class="northeast"></span> Northeast</li>
+		<li><span class="midwest"></span> Midwest</li>
+		<li><span class="south"></span> South</li>
+	</ul>
+	
+	<div class="wrapper">
+		<div id="keyframe"></div>
+		<div id="chart"></div>
+		<div id="ticker"></div>
+		<div id="d3"></div>
+	</div>
+	<p>While at first glance this graph seems to be a loose generalization of population, there clearly are some shifts that cannot be explained by population alone. Clearly, growing pressure within San Francisco is visible throughout the nineties, but its effect dulls over time when the city is largely taken over by the tech industry. As San Francisco goes down in hate crime, we see the other major Californian city, Los Angeles, grow in hate crime. Clearly, there's a shift here from one city to another. At the same time, LA sees a huge influx from YouTubers and the LGBT community who consider it a refuge for creatives and those who don't always fit in, bringing certain tension to the city. Another interesting aspect is the consistent issues Boston has with hate crime, that merely start to pale over time when LA, Washington and Seattle begin to top the list. We had of course wished to explore counties and cities in more detail, but due to a large chance of filing errors and anomalies on such a low level, zooming in on the data was only possible up until this level.</p>
+	
+	<script>
+var spec = {
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A map depicting hate crime across US states",
+  "width": 1880,
+  "height": 500,
+  "autosize": "none",
+  
+  "signals": [
+	{
+		"name": "Year", 
+		"value": 1991, 
+		"bind": {"input": "range", "min": 1991, "max": 2018, "step": 1}
+	},
+	{
+		"name": "selected_bias", 
+		"value": "All Hate Crime",
+		"bind": {
+			"name": "What kind of hate crime should be shown?",
+		"input": "select",
+		"options": ["All Hate Crime", "Anti-White", "Anti-Black or African American", "Anti-Hispanic or Latino", "Anti-Jewish", "Anti-Asian", "Anti-Arab", "Anti-Islamic (Muslim)", "Anti-LGBT"]
+		},
+		"update": "scale('translate_selected_bias',selected_bias)"
+	}
+  ],
+  "data": [
+	{
+		"name": "hatecrime",
+		"url": "https://raw.githubusercontent.com/Finterly/Data-Visualization-of-US-Hate-Crime-1991-2018/master/data/hate_crime_year_state_counts.csv",
+		"format": {"type": "csv", "parse": "auto"},
+		"transform": [
+		{
+			"type": "filter",
+			"expr": "datum.DATA_YEAR == Year"
+		}
+		]
+	},
+	{
+		"name": "hatecrime2",
+		"url": "https://raw.githubusercontent.com/Finterly/Data-Visualization-of-US-Hate-Crime-1991-2018/master/data/hate_crime_year_state_counts.csv",
+		"format": {"type": "csv", "parse": "auto"},
+		"transform": [
+		{
+			"type": "filter",
+			"expr": "datum.STATE_NAME != 'District of Columbia'"
+		},
+		{
+			"type": "filter",
+			"expr": "datum.STATE_NAME != 'Federal'"
+		},
+		{
+			"type": "filter",
+			"expr": "datum.STATE_NAME != 'Guam'"
+		},
+		{"type": "formula", "as": "pop_perc", "expr": "isNaN(datum[selected_bias] * 1000 / datum.pop) ? 0 : datum[selected_bias] * 1000 / datum.pop"}
+		]
+	},
+	{
+		"name": "map_states",
+		"url": "https://raw.githubusercontent.com/Finterly/Data-Visualization-of-US-Hate-Crime-1991-2018/master/data/states_geoid_mapping.csv",
+		"format": {"type": "csv", "parse": "auto"}
+	},
+	{
+		"name": "states",
+		"url": "https://raw.githubusercontent.com/Finterly/Data-Visualization-of-US-Hate-Crime-1991-2018/master/data/us-10m.json",
+		"format": {"type": "topojson", "feature": "states"},
+		"transform": [
+		{"type": "lookup", "from": "map_states", "key": "id", "fields": ["id"], "values": ["state"]},
+		{"type": "lookup", "from": "hatecrime", "key": "STATE_NAME", "fields": ["state"], "values": ["total", "pop", "white_count", "black_count", "latino_count", "jewish_count", "asian_count", "arab_count", "islamic_count", "lgbt_count", "perc_total", "perc_white", "perc_black", "perc_latino", "perc_jewish", "perc_asian", "perc_arab", "perc_islamic", "perc_lgbt"]},
+		{"type": "formula", "as": "pop_perc", "expr": "isNaN(datum[selected_bias] * 1000 / datum.pop) ? 0 : datum[selected_bias] * 1000 / datum.pop"}
+		]
+	}
+  ],
+
+  "projections": [
+	{
+		"name": "projection",
+		"type": "albersUsa"
+	}
+  ],
+
+  "scales": [
+	{
+		"name": "color",
+		"type": "linear",
+		"domain": {"data": "hatecrime2", "field": {"signal": "selected_bias"}},
+		"range": {"scheme": "oranges", "count": 20}
+	},
+	{
+		"name": "color2",
+		"type": "linear",
+		"domain": {"data": "hatecrime2", "field": "pop_perc"},
+		"range": {"scheme": "oranges", "count": 20}
+	},
+	{
+		"name": "translate_selected_bias",
+		"type": "ordinal",
+		"domain": ["All Hate Crime", "Anti-White", "Anti-Black or African American", "Anti-Hispanic or Latino", "Anti-Jewish", "Anti-Asian", "Anti-Arab", "Anti-Islamic (Muslim)", "Anti-LGBT"],
+		"range": ["total", "white_count", "black_count", "latino_count", "jewish_count", "asian_count", "arab_count", "islamic_count", "lgbt_count"]
+	},
+  ],
+
+  "legends": [
+	{
+		"fill": "color",
+		"orient": "bottom-left",
+		"title": "# Hate crimes"
+	},
+	{
+		"fill": "color2",
+		"orient": "bottom-right",
+		"title": "# Hate crimes per million"
+	}
+  ],
+  
+  "layout": {
+	"padding": 10,
+	"offset": 20,
+	"bounds": "full",
+	"align": "each"
+  },
+  
+  "marks": [
+	{
+		"type": "group",
+		"style": "cell",
+		"title": {
+		"text": "left",
+		"frame": "group"
+		},
+		"marks": [ 
+		{
+			"type": "shape",
+			"from": {"data": "states"},
+			"encode": {
+			"update": {
+				"fill" : {"scale": "color", "field": {"signal": "selected_bias"}},
+				"tooltip": {"signal": "{State: datum.state, 'Hate crimes': format(datum[selected_bias], ',.0f') }"}
+			},
+			"enter": {
+				"stroke": {"value": "white"}
+			},
+			"hover": {
+				"fill": {"value": "#cccccc"}
+			}
+			},
+			"transform": [
+			{ "type": "geoshape", "projection": "projection" }
+			]
+		},
+		{
+			"type": "text",
+			"interactive": false,
+			"encode": {
+			"enter": {
+				"y": {"value": 20},
+				"x": {"value": 300},
+				"text": {"value": "Cases of hate crime by US state"},
+				"baseline": {"value": "bottom"},
+				"fontSize": {"value": 20},
+				"fontWeight": {"value": 500},
+				"fill": {"value": "black"}
+			}
+			}
+		}
+		],
+	},
+	{
+		"type": "group",
+		"style": "cell",
+		"title": {
+		"text": "right",
+		"frame": "group"
+		},
+		"marks": [ 
+		{
+			"type": "shape",
+			"from": {"data": "states"},
+			"encode": {
+			"update": {
+				"fill" : {"scale": "color2", "field": "pop_perc"},
+				"tooltip": {"signal": "{State: datum.state, 'Hate crimes per million': format(datum.pop_perc, ',.0001f') }"}
+			},
+			"enter": {
+				"stroke": {"value": "white"}
+			},
+			"hover": {
+				"fill": {"value": "#cccccc"}
+			}
+			},
+			"transform": [
+			{ "type": "geoshape", "projection": "projection" }
+			]
+		},
+		{
+			"type": "text",
+			"interactive": false,
+			"encode": {
+			"enter": {
+				"y": {"value": 20},
+				"x": {"value": 250},
+				"text": {"value": "Cases of hate crime per million citizens by US state"},
+				"baseline": {"value": "bottom"},
+				"fontSize": {"value": 20},
+				"fontWeight": {"value": 500},
+				"fill": {"value": "black"}
+			}
+			}
+		}
+		] 
+	}
+  ]
+}
+
+var handler = new vegaTooltip.Handler();
+var view = new vega.View(vega.parse(spec), {
+  loader: vega.loader({target: '_blank'}),
+  logLevel: vega.Warn,
+  renderer: 'canvas',
+  tooltip: handler.call
+}).initialize('#vis1', '#vis1bindings').hover().run();
+	</script>
+	
+	<script>
+var spec = {
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 800,
+  "height": 450,
+  "padding": 5,
+  "signals": [
+	{
+		"name": "Year",
+		"value": 1991,
+		"bind": {"input": "range", "min": 1991, "max": 2018, "step": 1}
+	}
+  ],
+  "data": [
+	{
+		"name": "table",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/redblue_tally_perc.csv",
+		"format": {"type": "csv", "parse": {"newdate": "date"}, "delimiter": ","},
+		"transform": [{"type": "filter", "expr": "datum.year == Year"}]
+	},
+	{
+		"name": "table2",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/redblue_tally_perc.csv",
+		"format": {"type": "csv", "parse": {"newdate": "date"}, "delimiter": ","}
+	},
+	{
+		"name": "table3",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/star_events_perc.csv",
+		"format": {"type": "csv", "parse": {"date": "date"}, "delimiter": ","},
+		"transform": [{"type": "filter", "expr": "datum.year == Year"}]
+	},
+	{
+		"name": "redblue",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/redblue_wo_new.csv",
+		"format": {"type": "csv", "parse": "auto", "delimiter": ","},
+		"transform": [{"type": "filter", "expr": "datum.year == Year"}]
+	},
+	{
+		"name": "redblue2",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/redblue_wo_new.csv",
+		"format": {"type": "csv", "parse": "auto", "delimiter": ","}
+	},
+	{
+		"name": "states",
+		"url": "https://raw.githubusercontent.com/Finterly/Data-Visualization-of-US-Hate-Crime-1991-2018/master/data/us-10m.json",
+		"format": {"type": "topojson", "feature": "states"},
+		"transform": [
+		{
+			"type": "lookup",
+			"from": "redblue",
+			"key": "id",
+			"fields": ["id"],
+			"values": ["perc", "party", "state_name", "state"]
+		},
+		{"type": "filter", "expr": "datum.perc != null"}
+		]
+	}
+  ],
+  "projections": [{"name": "projection", "type": "albersUsa"}],
+  "scales": [
+	{
+		"name": "xscale",
+		"type": "utc",
+		"domain": {"data": "table", "field": "newdate"},
+		"range": "width"
+	},
+	{
+		"name": "yscale",
+		"domain": {"data": "table2", "field": "perc"},
+		"range": "height"
+	},
+	{
+		"name": "color",
+		"type": "ordinal",
+		"domain": ["Republican", "Democratic"],
+		"range": ["#f33", "#33f"]
+	},
+	{
+		"name": "starsize",
+		"type": "ordinal",
+		"domain": ["Event", "Holiday"],
+		"range": ["200", "120"]
+	},
+	{
+		"name": "opacity",
+		"type": "linear",
+		"zero": true,
+		"domain": {"data": "table", "field": "perc"},
+		"range": [0.2, 0.8]
+	},
+	
+	{
+		"name": "color2",
+		"type": "ordinal",
+		"domain": ["Republican", "Democratic"],
+		"range": ["#f33", "#33f"]
+	},
+	{
+		"name": "opacity2",
+		"type": "linear",
+		"zero": true,
+		"domain": {"data": "redblue2", "field": "perc"},
+		"range": [0.02, 1]
+	},
+	{
+		"name": "legend_label",
+		"type": "ordinal",
+		"domain": ["red", "blue"],
+		"range": ["Republican states", "Democratic states"]
+	}
+  ],
+  "axes": [
+	{"orient": "bottom", "scale": "xscale", "grid": true},
+	{"orient": "left", "scale": "yscale", "grid": true}
+  ],
+  "legends": [
+	{
+		"fill": "color",
+		"orient": "top-right",
+		"title": "US State Party",
+		"encode": {}
+	}
+  ],
+  "layout": {
+	"padding": 10,
+	"offset": 20,
+	"bounds": "full",
+	"align": "each"
+  },
+  "marks": [
+  {
+	"type": "group",
+	"style": "cell",
+	"marks": [
+		{
+			"type": "group",
+			"style": "cell",
+			"title": {"text": "", "frame": "group"},
+			"marks": [
+			{
+				"type": "symbol",
+				"from": {"data": "table"},
+				"encode": {
+				"enter": {
+					"x": {"scale": "xscale", "field": "newdate"},
+					"y": {"scale": "yscale", "field": "perc"},
+					"tooltip": {
+					"signal": "{Date: timeFormat(datum.newdate, '%b %d'), 'Hate crimes per million': format(datum.perc, '0.4')}"
+					}
+				},
+				"update": {
+					"fill": {"scale": "color", "field": "party"},
+					"fillOpacity": {"scale": "opacity", "field": "perc"},
+					"strokeWidth": {"value": 0}
+				},
+				"hover": {"stroke": {"scale": "color", "field": "party"}, "strokeWidth": {"value": 3}}
+				}
+			}
+			]
+		},
+		{
+			"type": "group",
+			"style": "cell",
+			"title": {"text": "", "frame": "group"},
+			"marks": [
+			{
+				"type": "symbol",
+				"from": {"data": "table3"},
+				"encode": {
+				"enter": {
+					"x": {"scale": "xscale", "field": "date"},
+					"y": {"scale": "yscale", "field": "perm_perc"},
+					"tooltip": {
+					"signal": "{'Event': datum.event_descr, 'Hate crimes per million': format(datum.perc, '0.4'), 'Date': timeFormat(datum.date, '%b %d')}"
+					},
+					"shape": {
+					"value": "M0,.5L.6,.8L.5,.1L1,-.3L.3,-.4L0,-1L-.3,-.4L-1,-.3L-.5,.1L-.6,.8L0,.5Z"
+					},
+					"size": {"scale": "starsize", "field": "event_type"},
+				},
+				"update": {
+					"fill": {"value": "#DAA520"},
+					"fillOpacity": {"value": 0.5},
+					"strokeWidth": {"value": 0}
+				},
+				"hover": {"stroke": {"value": "#DAA520"}, "strokeWidth": {"value": 3}}
+				}
+			}
+			]
+		},
+		{
+			"type": "text",
+			"interactive": false,
+			"encode": {
+			"enter": {
+				"y": {"value": 0},
+				"x": {"value": 80},
+				"text": {"value": "Hate crime grouped by state election result with events and holidays"},
+				"baseline": {"value": "bottom"},
+				"fontSize": {"value": 20},
+				"fontWeight": {"value": 500},
+				"fill": {"value": "black"}
+			}
+			}
+		}
+	]
+  },
+  {
+	"type": "group",
+	"style": "cell",
+	"marks": [
+	{
+		"type": "shape",
+		"from": {"data": "states"},
+		"encode": {
+		"enter": {},
+		"update": {
+			"fill": {"scale": "color2", "field": "party"},
+			"fillOpacity": {"scale": "opacity2", "field": "perc"},
+			"stroke": {"value": "#eee"},
+			"strokeWidth": {"value": 1},
+			"tooltip": {
+			"signal": "{State:datum.state_name, 'Hate crimes per million': format(datum.perc, '.0001f')}"
+			},
+			"zindex": {"value": 1}
+		},
+		"hover": {
+			"stroke": {"value": "#DAA520"},
+			"strokeWidth": {"value": 3},
+			"zindex": {"value": 5}
+		}
+		},
+		"transform": [{"type": "geoshape", "projection": "projection"}]
+	},
+	{
+		"type": "text",
+		"interactive": false,
+		"encode": {
+		"enter": {
+			"y": {"value": 0},
+			"x": {"value": 200},
+			"text": {"value": "Cases of hate crime per million citizens by US state and election result"},
+			"baseline": {"value": "bottom"},
+			"fontSize": {"value": 20},
+			"fontWeight": {"value": 500},
+			"fill": {"value": "black"}
+		}
+		}
+	}
+  ]
+  }
+  ]
+}
+
+var handler = new vegaTooltip.Handler();
+var view = new vega.View(vega.parse(spec), {
+  loader: vega.loader({target: '_blank'}),
+  logLevel: vega.Warn,
+  renderer: 'canvas',
+  tooltip: handler.call
+}).initialize('#vis2', '#vis2bindings').hover().run();
+	</script>
+	
+	<script>
+var spec = {
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "padding": {"left": 250, "top": 130},
+  "width": 660,
+  "height": 480,
+  "autosize": {"type": "none"},
+  "signals": [{"name": "radius", "update": "80"}],
+  "data": [
+	{
+		"name": "tableW",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/radarW"
+	},
+	{
+		"name": "keysW",
+		"source": "tableW",
+		"transform": [{"type": "aggregate", "groupby": ["key"]}]
+	},
+	{
+		"name": "tableNE",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/radarNE"
+	},
+	{
+		"name": "keysNE",
+		"source": "tableNE",
+		"transform": [{"type": "aggregate", "groupby": ["key"]}]
+	},
+	{
+		"name": "tableMW",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/radarMW"
+	},
+	{
+		"name": "keysMW",
+		"source": "tableMW",
+		"transform": [{"type": "aggregate", "groupby": ["key"]}]
+	},
+	{
+		"name": "tableS",
+		"url": "https://raw.githubusercontent.com/Finterly/Datasets_to_play_with/master/radarS"
+	},
+	{
+		"name": "keysS",
+		"source": "tableS",
+		"transform": [{"type": "aggregate", "groupby": ["key"]}]
+	}
+  ],
+  "scales": [
+	{
+		"name": "angular",
+		"type": "point",
+		"range": {"signal": "[-PI, PI]"},
+		"padding": 0.5,
+		"domain": {"data": "tableNE", "field": "key"}
+	},
+	{
+		"name": "radial",
+		"type": "linear",
+		"range": {"signal": "[0, radius]"},
+		"zero": true,
+		"nice": false,
+		"domain": {"data": "tableNE", "field": "n"},
+		"domainMin": 0
+	},
+	{
+		"name": "color",
+		"type": "ordinal",
+		"domain": {"data": "tableNE", "field": "category"},
+		"range": {"scheme": "category10"}
+	}
+  ],
+  "layout": {"padding": 20, "columns": 2},
+  "marks": [
+	{
+		"title": {
+		"text": "West",
+		"fontSize": 20,
+		"dx": 15,
+		"dy": -10
+		},
+		"type": "group",
+		"encode": {"update": {"width": {"value": 200}, "height": {"value": 200}}},
+		"marks": [
+		{
+			"type": "group",
+			"name": "categories",
+			"zindex": 1,
+			"from": {
+			"facet": {
+				"data": "tableW",
+				"name": "facet",
+				"groupby": ["category"]
+			}
+			},
+			"marks": [
+			{
+				"type": "line",
+				"name": "category-line",
+				"from": {"data": "facet"},
+				"encode": {
+				"enter": {
+					"interpolate": {"value": "linear-closed"},
+					"x": {
+					"signal": "scale('radial', datum.n) * cos(scale('angular', datum.key))"
+					},
+					"y": {
+					"signal": "scale('radial', datum.n) * sin(scale('angular', datum.key))"
+					},
+					"stroke": {"scale": "color", "field": "category"},
+					"strokeWidth": {"value": 1},
+					"fill": {"scale": "color", "field": "category"},
+					"fillOpacity": {"value": 0.1}
+				}
+				}
+			}
+			]
+		},
+		{
+			"type": "rule",
+			"name": "radial-grid",
+			"from": {"data": "keysW"},
+			"zindex": 0,
+			"encode": {
+			"enter": {
+				"x": {"value": 0},
+				"y": {"value": 0},
+				"x2": {"signal": "radius * cos(scale('angular', datum.key))"},
+				"y2": {"signal": "radius * sin(scale('angular', datum.key))"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		},
+		{
+			"type": "text",
+			"name": "key-label",
+			"from": {"data": "keysW"},
+			"zindex": 1,
+			"encode": {
+			"enter": {
+				"x": {
+				"signal": "(radius + 5) * cos(scale('angular', datum.key))"
+				},
+				"y": {
+				"signal": "(radius + 5) * sin(scale('angular', datum.key))"
+				},
+				"text": {"field": "key"},
+				"align": [
+				{
+					"test": "abs(scale('angular', datum.key)) > PI / 2",
+					"value": "right"
+				},
+				{"value": "left"}
+				],
+				"baseline": [
+				{"test": "scale('angular', datum.key) > 0", "value": "top"},
+				{"test": "scale('angular', datum.key) == 0", "value": "middle"},
+				{"value": "bottom"}
+				],
+				"fill": {"value": "black"},
+				"fontWeight": {"value": "bold"}
+			}
+			}
+		},
+		{
+			"type": "line",
+			"name": "outer-line",
+			"from": {"data": "radial-grid"},
+			"encode": {
+			"enter": {
+				"interpolate": {"value": "linear-closed"},
+				"x": {"field": "x2"},
+				"y": {"field": "y2"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		}
+		]
+	},
+	{
+		"title": {
+		"text": "Northeast",
+		"fontSize": 20,
+		"dx": 15,
+		"dy": -10
+		},
+		"type": "group",
+		"encode": {"update": {"width": {"value": 200}, "height": {"value": 200}}},
+		"marks": [
+		{
+			"type": "group",
+			"name": "categories",
+			"zindex": 1,
+			"from": {
+			"facet": {
+				"data": "tableNE",
+				"name": "facet",
+				"groupby": ["category"]
+			}
+			},
+			"marks": [
+			{
+				"type": "line",
+				"name": "category-line",
+				"from": {"data": "facet"},
+				"encode": {
+				"enter": {
+					"interpolate": {"value": "linear-closed"},
+					"x": {
+					"signal": "scale('radial', datum.n) * cos(scale('angular', datum.key))"
+					},
+					"y": {
+					"signal": "scale('radial', datum.n) * sin(scale('angular', datum.key))"
+					},
+					"stroke": {"scale": "color", "field": "category"},
+					"strokeWidth": {"value": 1},
+					"fill": {"scale": "color", "field": "category"},
+					"fillOpacity": {"value": 0.1}
+				}
+				}
+			}
+			]
+		},
+		{
+			"type": "rule",
+			"name": "radial-grid",
+			"from": {"data": "keysNE"},
+			"zindex": 0,
+			"encode": {
+			"enter": {
+				"x": {"value": 0},
+				"y": {"value": 0},
+				"x2": {"signal": "radius * cos(scale('angular', datum.key))"},
+				"y2": {"signal": "radius * sin(scale('angular', datum.key))"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		},
+		{
+			"type": "text",
+			"name": "key-label",
+			"from": {"data": "keysNE"},
+			"zindex": 1,
+			"encode": {
+			"enter": {
+				"x": {
+				"signal": "(radius + 5) * cos(scale('angular', datum.key))"
+				},
+				"y": {
+				"signal": "(radius + 5) * sin(scale('angular', datum.key))"
+				},
+				"text": {"field": "key"},
+				"align": [
+				{
+					"test": "abs(scale('angular', datum.key)) > PI / 2",
+					"value": "right"
+				},
+				{"value": "left"}
+				],
+				"baseline": [
+				{"test": "scale('angular', datum.key) > 0", "value": "top"},
+				{"test": "scale('angular', datum.key) == 0", "value": "middle"},
+				{"value": "bottom"}
+				],
+				"fill": {"value": "black"},
+				"fontWeight": {"value": "bold"}
+			}
+			}
+		},
+		{
+			"type": "line",
+			"name": "outer-line",
+			"from": {"data": "radial-grid"},
+			"encode": {
+			"enter": {
+				"interpolate": {"value": "linear-closed"},
+				"x": {"field": "x2"},
+				"y": {"field": "y2"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		}
+		]
+	},
+	{
+		"title": {
+		"text": "Midwest",
+		"fontSize": 20,
+		"dx": 15,
+		"dy": -10
+		},
+		"type": "group",
+		"encode": {"update": {"width": {"value": 200}, "height": {"value": 200}}},
+		"marks": [
+		{
+			"type": "group",
+			"name": "categories",
+			"zindex": 1,
+			"from": {
+			"facet": {
+				"data": "tableMW",
+				"name": "facet",
+				"groupby": ["category"]
+			}
+			},
+			"marks": [
+			{
+				"type": "line",
+				"name": "category-line",
+				"from": {"data": "facet"},
+				"encode": {
+				"enter": {
+					"interpolate": {"value": "linear-closed"},
+					"x": {
+					"signal": "scale('radial', datum.n) * cos(scale('angular', datum.key))"
+					},
+					"y": {
+					"signal": "scale('radial', datum.n) * sin(scale('angular', datum.key))"
+					},
+					"stroke": {"scale": "color", "field": "category"},
+					"strokeWidth": {"value": 1},
+					"fill": {"scale": "color", "field": "category"},
+					"fillOpacity": {"value": 0.1}
+				}
+				}
+			}
+			]
+		},
+		{
+			"type": "rule",
+			"name": "radial-grid",
+			"from": {"data": "keysMW"},
+			"zindex": 0,
+			"encode": {
+			"enter": {
+				"x": {"value": 0},
+				"y": {"value": 0},
+				"x2": {"signal": "radius * cos(scale('angular', datum.key))"},
+				"y2": {"signal": "radius * sin(scale('angular', datum.key))"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		},
+		{
+			"type": "text",
+			"name": "key-label",
+			"from": {"data": "keysMW"},
+			"zindex": 1,
+			"encode": {
+			"enter": {
+				"x": {
+				"signal": "(radius + 5) * cos(scale('angular', datum.key))"
+				},
+				"y": {
+				"signal": "(radius + 5) * sin(scale('angular', datum.key))"
+				},
+				"text": {"field": "key"},
+				"align": [
+				{
+					"test": "abs(scale('angular', datum.key)) > PI / 2",
+					"value": "right"
+				},
+				{"value": "left"}
+				],
+				"baseline": [
+				{"test": "scale('angular', datum.key) > 0", "value": "top"},
+				{"test": "scale('angular', datum.key) == 0", "value": "middle"},
+				{"value": "bottom"}
+				],
+				"fill": {"value": "black"},
+				"fontWeight": {"value": "bold"}
+			}
+			}
+		},
+		{
+			"type": "line",
+			"name": "outer-line",
+			"from": {"data": "radial-grid"},
+			"encode": {
+			"enter": {
+				"interpolate": {"value": "linear-closed"},
+				"x": {"field": "x2"},
+				"y": {"field": "y2"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		}
+		]
+	},
+	{
+		"title": {
+		"text": "South",
+		"fontSize": 20,
+		"dx": 15,
+		"dy": -10
+		},
+		"type": "group",
+		"encode": {"update": {"width": {"value": 200}, "height": {"value": 200}}},
+		"marks": [
+		{
+			"type": "group",
+			"name": "categories",
+			"zindex": 1,
+			"from": {
+			"facet": {
+				"data": "tableS",
+				"name": "facet",
+				"groupby": ["category"]
+			}
+			},
+			"marks": [
+			{
+				"type": "line",
+				"name": "category-line",
+				"from": {"data": "facet"},
+				"encode": {
+				"enter": {
+					"interpolate": {"value": "linear-closed"},
+					"x": {
+					"signal": "scale('radial', datum.n) * cos(scale('angular', datum.key))"
+					},
+					"y": {
+					"signal": "scale('radial', datum.n) * sin(scale('angular', datum.key))"
+					},
+					"stroke": {"scale": "color", "field": "category"},
+					"strokeWidth": {"value": 1},
+					"fill": {"scale": "color", "field": "category"},
+					"fillOpacity": {"value": 0.1}
+				}
+				}
+			}
+			]
+		},
+		{
+			"type": "rule",
+			"name": "radial-grid",
+			"from": {"data": "keysS"},
+			"zindex": 0,
+			"encode": {
+			"enter": {
+				"x": {"value": 0},
+				"y": {"value": 0},
+				"x2": {"signal": "radius * cos(scale('angular', datum.key))"},
+				"y2": {"signal": "radius * sin(scale('angular', datum.key))"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		},
+		{
+			"type": "text",
+			"name": "key-label",
+			"from": {"data": "keysS"},
+			"zindex": 1,
+			"encode": {
+			"enter": {
+				"x": {
+				"signal": "(radius + 5) * cos(scale('angular', datum.key))"
+				},
+				"y": {
+				"signal": "(radius + 5) * sin(scale('angular', datum.key))"
+				},
+				"text": {"field": "key"},
+				"align": [
+				{
+					"test": "abs(scale('angular', datum.key)) > PI / 2",
+					"value": "right"
+				},
+				{"value": "left"}
+				],
+				"baseline": [
+				{"test": "scale('angular', datum.key) > 0", "value": "top"},
+				{"test": "scale('angular', datum.key) == 0", "value": "middle"},
+				{"value": "bottom"}
+				],
+				"fill": {"value": "black"},
+				"fontWeight": {"value": "bold"}
+			}
+			}
+		},
+		{
+			"type": "line",
+			"name": "outer-line",
+			"from": {"data": "radial-grid"},
+			"encode": {
+			"enter": {
+				"interpolate": {"value": "linear-closed"},
+				"x": {"field": "x2"},
+				"y": {"field": "y2"},
+				"stroke": {"value": "lightgray"},
+				"strokeWidth": {"value": 1}
+			}
+			}
+		}
+		]
+	}
+  ],
+  "legends": [
+	{
+		"fill": "color", 
+		"orient": "none",
+		"direction": "horizontal",
+		"offset": {"value": 150},
+		"labelFontSize": 18,
+		"legendX": 130,
+		"legendY": 130,
+		"title": "Legend",
+		"titleFontSize": 20
+	}
+  ]
+}
+
+var view = new vega.View(vega.parse(spec), {
+  loader: vega.loader({target: '_blank'}),
+  logLevel: vega.Warn,
+  renderer: 'canvas'
+}).initialize('#vis3').hover().run();
+	</script>
+	
+	<script>
+	var playButtonIntervalId1;
+	function playButton1() {
+		var el = document.querySelector("#vis1bindings input[name='Year']");
+		el.value = 1991;
+		var event = new Event('change');
+		el.dispatchEvent(event);
+		
+		playButtonIntervalId1 = window.setInterval(increaseYear1, 500);
+		document.getElementById("play1").id = "stop1";
+		document.getElementById("stop1").onclick = stopButton1;
+	}
+	
+	function increaseYear1() {
+		var el = document.querySelector("#vis1bindings input[name='Year']");
+		var currentYear = parseInt(el.value);
+		if(currentYear < 2018) {
+			el.value = currentYear + 1;
+			var event = new Event('change');
+			el.dispatchEvent(event);
+		}
+		else {
+			clearInterval(playButtonIntervalId1);
+			document.getElementById("stop1").id = "play1";
+			document.getElementById("play1").onclick = playButton1;
+		}
+	}
+	
+	function stopButton1() {
+		clearInterval(playButtonIntervalId1);
+		document.getElementById("stop1").id = "play1";
+		document.getElementById("play1").onclick = playButton1;
+	}
+	</script>
+	
+	<script>
+	var playButtonIntervalId2;
+	function playButton2() {
+		//var el = document.getElementsByName("Year");
+		var el = document.querySelector("#vis2bindings input[name='Year']");
+		el.value = 1991;
+		var event = new Event('change');
+		el.dispatchEvent(event);
+		
+		playButtonIntervalId2 = window.setInterval(increaseYear2, 500);
+		document.getElementById("play2").id = "stop2";
+		document.getElementById("stop2").onclick = stopButton2;
+	}
+	
+	function increaseYear2() {
+		var el = document.querySelector("#vis2bindings input[name='Year']");
+		var currentYear = parseInt(el.value);
+		if(currentYear < 2018) {
+			el.value = currentYear + 1;
+			var event = new Event('change');
+			el.dispatchEvent(event);
+		}
+		else {
+			clearInterval(playButtonIntervalId2);
+			document.getElementById("stop2").id = "play2";
+			document.getElementById("play2").onclick = playButton2;
+		}
+	}
+	
+	function stopButton2() {
+		clearInterval(playButtonIntervalId2);
+		document.getElementById("stop2").id = "play2";
+		document.getElementById("play2").onclick = playButton2;
+	}
+	</script>
+	<script type="module">
+	import {Runtime} from "https://unpkg.com/@observablehq/runtime@4/dist/runtime.js";
+	import notebook from "https://api.observablehq.com/@lyfvisual/bar-chart-race-with-scrubber.js?v=3";
+	const renders = {
+		"viewof keyframe": "#keyframe",
+		"chart": "#chart",
+		"viewof d3": "#d3",
+		"viewof ticker": "#ticker",
+	};
+	function render(_node, value) {
+		if (!(value instanceof Element)) {
+		  const el = document.createElement("span");
+		  el.innerHTML = value;
+		  value = el;
+		}
+		if (_node.firstChild !== value) {
+			if (_node.firstChild) {
+				while (_node.lastChild !== _node.firstChild) _node.removeChild(_node.lastChild);
+				_node.replaceChild(value, _node.firstChild);
+			} else {
+				_node.appendChild(value);
+			}
+		}
+	}
+	const runtime = new Runtime();
+	const main = runtime.module(notebook, name => {
+		const selector = renders[name];
+		if (selector) {
+			return {fulfilled: (value) => render(document.querySelector(selector), value)}
+		} else {
+			return true;
+		}
+	});
+    </script>
+	</body>
+</html>
