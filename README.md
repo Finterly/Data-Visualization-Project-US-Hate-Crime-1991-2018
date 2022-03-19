@@ -1,7 +1,8 @@
 ## Data Visualization Project
 
-Visualizations created using Vega, a higher-level visualization specification language on top of D3, and D3. Group members Bert Van de Poel...
+See website here: https://finterly.github.io/Data-Visualization-of-US-Hate-Crime-1991-2018/
 
+Visualizations created using Vega, a higher-level visualization specification language on top of D3, and D3. 
 
 ### The data
 All visualizations are based on data provided by the Hate Crime Statistics Program of the FBI's Uniform Crime Reporting Program. It's important to keep in mind that the FBI data contains all instances of what was considered hate crime by the reporting officer. Depending on time, space and a lot of subjective aspects, an individual or an entire area's police force could be applying principles that hate crime has to be specifically and only motivated by hate or consider the use of a single racial slur as hate crime. While both are valid principles, this means that there are some effects within the data that are caused by differences in reporting principles within certain time periods or certain states or counties. The perception of race and racism, as well as what constitutes hate agaist a religion has changed across time. Hate crime against people with a non-heterosexual sexual orientation also went unreported during the 90s, keeping in mind that some states took until 2003 to decriminalize sexual acts between persons of the same sex. While these problems with the data should be kept in mind, they don't invalidate broad conclusions and visualizations, but make focusing on very specific points in time and space somewhat more problematic.
